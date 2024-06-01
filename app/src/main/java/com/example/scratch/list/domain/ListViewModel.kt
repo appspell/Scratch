@@ -1,16 +1,16 @@
-package com.example.scratch.list
+package com.example.scratch.list.domain
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.scratch.list.data.ListItemDTO
+import com.example.scratch.list.data.ListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class ListViewModel @Inject constructor(

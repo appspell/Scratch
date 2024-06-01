@@ -1,4 +1,4 @@
-package com.example.scratch.list
+package com.example.scratch.list.data
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -7,30 +7,21 @@ import java.util.Date
 import javax.inject.Inject
 import kotlin.random.Random
 
-data class ListItemDTO(
-    val id: Long,
-    val name: String,
-    val date: Date,
-    val type: Type,
-) {
-    enum class Type {
-        BOAT, RAFT
-    }
-}
-
-interface ListRepository {
-
-    fun addNewItem()
-    suspend fun observeList(): Flow<List<ListItemDTO>>
-    fun deleteItem(id: Long)
-}
-
-class ListRepositoryImpl @Inject constructor() : ListRepository {
+class InMemoryListRepository @Inject constructor() : ListRepository {
 
     private var indexCounter = 0L
     private val list = MutableStateFlow<List<ListItemDTO>>(emptyList())
 
     override suspend fun observeList(): Flow<List<ListItemDTO>> = list
+
+    init {
+        // create random list
+        list.update {
+            listOf(
+                createRandomItem(), createRandomItem(), createRandomItem(), createRandomItem()
+            )
+        }
+    }
 
     override fun deleteItem(id: Long) {
         list.update {

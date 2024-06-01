@@ -1,4 +1,4 @@
-package com.example.scratch.list
+package com.example.scratch.list.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -36,6 +36,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.scratch.R
+import com.example.scratch.list.domain.ListState
+import com.example.scratch.list.domain.ListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,20 +52,16 @@ fun ListContent(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Title")
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        navigationController.navigateUp()
-                    }) {
-                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "")
-                    }
+                    Text(stringResource(id = R.string.list_screen_title))
                 },
                 actions = {
                     IconButton(onClick = {
                         viewModel.addNew()
                     }) {
-                        Icon(imageVector = Icons.Filled.Add, contentDescription = "Add")
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = stringResource(id = R.string.list_add_content_description)
+                        )
                     }
                 })
         }

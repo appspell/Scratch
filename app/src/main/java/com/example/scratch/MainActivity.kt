@@ -4,12 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.scratch.list.ListContent
-import com.example.scratch.list.ListViewModel
+import com.example.scratch.list.view.ListContent
+import com.example.scratch.list.domain.ListViewModel
 import com.example.scratch.ui.theme.ScratchTheme
 import dagger.hilt.android.AndroidEntryPoint
 

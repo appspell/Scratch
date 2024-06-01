@@ -1,4 +1,4 @@
-package com.example.scratch.list
+package com.example.scratch.list.domain
 
 data class ListState(
     val list: List<Item>
