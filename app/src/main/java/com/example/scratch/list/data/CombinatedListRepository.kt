@@ -1,27 +1,32 @@
 package com.example.scratch.list.data
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import java.util.Date
 import javax.inject.Inject
 import kotlin.random.Random
 
-class InMemoryListRepository @Inject constructor() : ListRepository {
+class CombinatedListRepository @Inject constructor(
+    private val remoteListService: RemoteListService
+) : ListRepository {
 
     private var indexCounter = 0L
     private val list = MutableStateFlow<List<ListItemDTO>>(emptyList())
 
-    override suspend fun observeList(): Flow<List<ListItemDTO>> = list
-
-    init {
-        // create random list
-        list.update {
-            listOf(
-                createRandomItem(), createRandomItem(), createRandomItem(), createRandomItem()
-            )
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun observeList(): Flow<List<ListItemDTO>> =
+        flow {
+            val remoteList = remoteListService.getList().list
+            emit(remoteList)
         }
-    }
+            .flatMapLatest { remoteList ->
+                list.update { remoteList }
+                list
+            }
 
     override fun deleteItem(id: Long) {
         list.update {

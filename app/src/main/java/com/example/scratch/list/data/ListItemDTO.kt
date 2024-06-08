@@ -1,6 +1,12 @@
 package com.example.scratch.list.data
 
+import com.google.gson.annotations.SerializedName
 import java.util.Date
+
+data class ResponseList(
+    val list : List<ListItemDTO>,
+    val nextPage : String
+)
 
 data class ListItemDTO(
     val id: Long,
@@ -9,6 +15,10 @@ data class ListItemDTO(
     val type: Type,
 ) {
     enum class Type {
-        BOAT, RAFT
+        @SerializedName("boat")
+        BOAT,
+
+        @SerializedName("raft")
+        RAFT
     }
 }
