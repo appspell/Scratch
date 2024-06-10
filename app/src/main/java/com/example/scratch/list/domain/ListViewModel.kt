@@ -1,15 +1,19 @@
 package com.example.scratch.list.domain
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.scratch.list.data.ListItemDTO
 import com.example.scratch.list.data.ListRepository
-import com.example.scratch.list.domain.ListState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
@@ -23,8 +27,10 @@ class ListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            repository.init()
+
             repository.observeList()
-                .collect() { list ->
+                .collect { list ->
                     _state.update {
                         ListState(
                             list = list.map { dto ->
@@ -45,11 +51,11 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    fun addNew() {
+    fun addNew() = viewModelScope.launch(Dispatchers.IO) {
         repository.addNewItem()
     }
 
-    fun onSelect(index: Int) {
+    fun onSelect(index: Int) = viewModelScope.launch(Dispatchers.IO) {
         _state.update {
             //deselect others
             val list = it.list.toMutableList().map { it.copy(isSelected = false) }
@@ -60,7 +66,7 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    fun onDelete(index: Int) {
+    fun onDelete(index: Int) = viewModelScope.launch(Dispatchers.IO) {
         val id = state.value.list.get(index = index).id
         repository.deleteItem(id)
     }

@@ -1,7 +1,6 @@
-package com.example.scratch.list.data
+package com.example.scratch.list.data.remote
 
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RemoteListService {
