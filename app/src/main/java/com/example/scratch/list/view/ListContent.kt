@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,7 +41,7 @@ import com.example.scratch.list.domain.ListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListContent(
+fun ListContentScreen(
     navigationController: NavController,
     viewModel: ListViewModel
 ) {
@@ -74,6 +74,8 @@ fun ListContent(
                             viewModel.onSelect(index = index)
                         }, onDelete = {
                             viewModel.onDelete(index = index)
+                        }, onOpen = {
+                            navigationController.navigate("/list/${item.id}")
                         })
                     }
                 }
@@ -83,7 +85,12 @@ fun ListContent(
 }
 
 @Composable
-fun ListItem(item: ListState.Item, onClick: () -> Unit, onDelete: () -> Unit) {
+fun ListItem(
+    item: ListState.Item,
+    onClick: () -> Unit,
+    onDelete: () -> Unit,
+    onOpen: () -> Unit,
+) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -126,12 +133,28 @@ fun ListItem(item: ListState.Item, onClick: () -> Unit, onDelete: () -> Unit) {
 
 
             if (item.isSelected) {
-                Button(
-                    modifier = Modifier
-                        .padding(8.dp),
-                    onClick = { onDelete.invoke() }
-                ) {
-                    Text(text = stringResource(id = R.string.delete))
+                Row {
+                    Button(
+                        modifier = Modifier
+                            .padding(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error
+                        ),
+                        onClick = { onDelete.invoke() }
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.delete)
+                        )
+                    }
+
+                    Button(
+                        modifier = Modifier
+                            .padding(8.dp),
+                        onClick = { onOpen.invoke() }
+                    ) {
+                        Text(text = stringResource(id = R.string.open))
+                    }
+
                 }
             }
         }
@@ -149,5 +172,6 @@ fun ListItemPreview() {
         type = ListState.Item.Type.BOAT
     ),
         onClick = {},
-        onDelete = {})
+        onDelete = {},
+        onOpen = {})
 }

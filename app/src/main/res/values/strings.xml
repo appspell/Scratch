@@ -3,4 +3,6 @@
     <string name="delete">delete</string>
     <string name="list_screen_title">List</string>
     <string name="list_add_content_description">Add</string>
+    <string name="open">open</string>
+    <string name="details_screen">Details</string>
 </resources>
